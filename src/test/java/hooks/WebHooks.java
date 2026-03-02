@@ -11,7 +11,11 @@ import java.time.Duration;
 
 public class WebHooks {
 
-    public static WebDriver driver;
+    private WebDriver driver;
+
+    public WebDriver getDriver() {
+        return driver;
+    }
 
     @Before("@web")
     public void setUp() {
@@ -24,7 +28,6 @@ public class WebHooks {
         options.addArguments("--headless=new");
         options.addArguments("--no-sandbox");
         options.addArguments("--disable-dev-shm-usage");
-        options.addArguments("--disable-gpu");
         options.addArguments("--window-size=1920,1080");
 
         driver = new ChromeDriver(options);

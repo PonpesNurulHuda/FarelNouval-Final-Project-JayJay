@@ -3,14 +3,22 @@ package web;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.Assert;
+import org.openqa.selenium.WebDriver;
 import web.CheckoutPage;
 import web.InventoryPage;
 import hooks.WebHooks;
 
 public class CheckoutSteps {
 
-    InventoryPage inventoryPage = new InventoryPage(WebHooks.driver);
-    CheckoutPage checkoutPage = new CheckoutPage(WebHooks.driver);
+    private WebDriver driver;
+    private InventoryPage inventoryPage;
+    private CheckoutPage checkoutPage;
+
+    public CheckoutSteps(WebHooks hooks) {
+        this.driver = hooks.getDriver();
+        this.inventoryPage = new InventoryPage(driver);
+        this.checkoutPage = new CheckoutPage(driver);
+    }
 
     @When("User clicks cart icon")
     public void user_clicks_cart_icon() {

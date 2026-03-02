@@ -15,8 +15,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class LoginSteps {
 
-    WebDriver driver = WebHooks.driver;
-    LoginPage loginPage = new LoginPage(driver);
+    private WebDriver driver;
+    private LoginPage loginPage;
+
+    public LoginSteps(WebHooks hooks) {
+        this.driver = hooks.getDriver();
+        this.loginPage = new LoginPage(driver);
+    }
 
     @Given("User is on login page")
     public void user_is_on_login_page(){

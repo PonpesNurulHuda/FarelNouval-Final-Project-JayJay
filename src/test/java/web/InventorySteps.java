@@ -15,8 +15,13 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class InventorySteps {
-    WebDriver driver = WebHooks.driver;
-    InventoryPage inventoryPage = new InventoryPage(driver);
+    private WebDriver driver;
+    private InventoryPage inventoryPage;
+
+    public InventorySteps(WebHooks hooks) {
+        this.driver = hooks.getDriver();
+        this.inventoryPage = new InventoryPage(driver);
+    }
 
     @When("User adds backpack to cart")
     public void user_adds_backpack_to_cart() {

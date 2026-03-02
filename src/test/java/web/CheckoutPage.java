@@ -29,6 +29,12 @@ public class CheckoutPage {
 
     public void clickCheckout() {
 
+        wait.until(ExpectedConditions.urlContains("cart.html"));
+
+        wait.until(ExpectedConditions.numberOfElementsToBeMoreThan(
+                By.className("cart_item"), 0
+        ));
+
         WebElement checkoutBtn = wait.until(
                 ExpectedConditions.elementToBeClickable(
                         By.id("checkout")
@@ -42,36 +48,60 @@ public class CheckoutPage {
 
     public void fillCheckoutInformation() {
 
-        wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.id("first-name")
-        ));
+        wait.until(ExpectedConditions.urlContains("checkout-step-one"));
 
-        driver.findElement(By.id("first-name")).sendKeys("Farel");
-        driver.findElement(By.id("last-name")).sendKeys("Nouval");
-        driver.findElement(By.id("postal-code")).sendKeys("40281");
+        WebElement firstNameField = wait.until(
+                ExpectedConditions.elementToBeClickable(By.id("first-name"))
+        );
+        firstNameField.clear();
+        firstNameField.sendKeys("Farel");
+
+        WebElement lastNameField = driver.findElement(By.id("last-name"));
+        lastNameField.clear();
+        lastNameField.sendKeys("Nouval");
+
+        WebElement postalField = driver.findElement(By.id("postal-code"));
+        postalField.clear();
+        postalField.sendKeys("40281");
+
+        wait.until(driver ->
+                firstNameField.getAttribute("value").equals("Farel") &&
+                        lastNameField.getAttribute("value").equals("Nouval") &&
+                        postalField.getAttribute("value").equals("40281")
+        );
     }
 
     public void clickContinue() {
 
-        wait.until(ExpectedConditions.elementToBeClickable(
-                By.id("continue")
-        )).click();
+        WebElement continueBtn = wait.until(
+                ExpectedConditions.elementToBeClickable(By.id("continue"))
+        );
+
+        continueBtn.click();
+
+        if (driver.findElements(By.cssSelector("[data-test='error']")).size() > 0) {
+            throw new RuntimeException("Checkout validation error muncul");
+        }
 
         wait.until(ExpectedConditions.urlContains("checkout-step-two"));
     }
 
     public void clickFinish() {
 
-        wait.until(ExpectedConditions.elementToBeClickable(
-                By.id("finish")
-        )).click();
+        wait.until(ExpectedConditions.urlContains("checkout-step-two"));
 
-        wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.className("complete-header")
-        ));
+        WebElement finishBtn = wait.until(
+                ExpectedConditions.elementToBeClickable(By.id("finish"))
+        );
+
+        finishBtn.click();
+
+        wait.until(ExpectedConditions.urlContains("checkout-complete"));
     }
 
     public boolean isOrderSuccessful() {
+
+        wait.until(ExpectedConditions.urlContains("checkout-complete"));
 
         WebElement success = wait.until(
                 ExpectedConditions.visibilityOfElementLocated(

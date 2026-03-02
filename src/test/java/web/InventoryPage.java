@@ -32,6 +32,7 @@ public class InventoryPage {
 
     public void addBackpackToCart() {
 
+        wait.until(ExpectedConditions.urlContains("inventory.html"));
         wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.id("inventory_container")
         ));
@@ -92,8 +93,10 @@ public class InventoryPage {
         );
         logout.click();
 
-        wait.until(ExpectedConditions.urlContains("saucedemo.com"));
-    }
+        wait.until(ExpectedConditions.urlContains("saucedemo.com/"));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.id("login-button")
+        ));    }
 
     public boolean isOnLoginPage() {
         return driver.getCurrentUrl().contains("saucedemo.com");
