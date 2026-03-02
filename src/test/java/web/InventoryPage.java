@@ -41,6 +41,9 @@ public class InventoryPage {
 
         wait.until(ExpectedConditions.presenceOfElementLocated(backpackButton));
         wait.until(ExpectedConditions.elementToBeClickable(backpackButton)).click();
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.className("shopping_cart_badge")
+        ));
     }
 
     public String getCartBadgeCount() {
@@ -88,9 +91,11 @@ public class InventoryPage {
 
     public void clickCart() {
 
-        wait.until(ExpectedConditions.elementToBeClickable(
-                By.id("shopping_cart_container")
-        )).click();
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+
+        By cartContainer = By.id("shopping_cart_container");
+
+        wait.until(ExpectedConditions.elementToBeClickable(cartContainer)).click();
 
         wait.until(ExpectedConditions.urlContains("cart.html"));
     }

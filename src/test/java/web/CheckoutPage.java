@@ -27,13 +27,14 @@ public class CheckoutPage {
 
     public void clickCheckout() {
 
-        wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.id("checkout")
-        ));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
 
-        wait.until(ExpectedConditions.elementToBeClickable(
-                By.id("checkout")
-        )).click();
+        By checkoutBtn = By.id("checkout");
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(checkoutBtn));
+        wait.until(ExpectedConditions.elementToBeClickable(checkoutBtn));
+
+        driver.findElement(checkoutBtn).click();
 
         wait.until(ExpectedConditions.urlContains("checkout-step-one"));
     }
@@ -55,7 +56,9 @@ public class CheckoutPage {
                 By.id("continue")
         )).click();
 
-        wait.until(ExpectedConditions.urlContains("checkout-step-two"));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.id("finish")
+        ));
     }
 
     public void clickFinish() {
