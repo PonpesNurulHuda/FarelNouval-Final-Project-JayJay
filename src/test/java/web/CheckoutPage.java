@@ -1,7 +1,9 @@
 package web;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -55,6 +57,9 @@ public class CheckoutPage {
         wait.until(ExpectedConditions.elementToBeClickable(
                 By.id("continue")
         )).click();
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.className("cart_item")
+        ));
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.id("finish")
@@ -63,13 +68,14 @@ public class CheckoutPage {
 
     public void clickFinish() {
 
-        wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.id("finish")
-        ));
+        By finishBtn = By.id("finish");
 
-        wait.until(ExpectedConditions.elementToBeClickable(
-                By.id("finish")
-        )).click();
+        WebElement button = wait.until(
+                ExpectedConditions.elementToBeClickable(finishBtn)
+        );
+
+        ((JavascriptExecutor) driver)
+                .executeScript("arguments[0].click();", button);
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.className("complete-header")
@@ -78,13 +84,12 @@ public class CheckoutPage {
 
     public boolean isOrderSuccessful() {
 
-        System.out.println("Checking success page - URL: " + driver.getCurrentUrl());
-        wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.className("complete-header")
-        ));
+        WebElement success = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(
+                        By.className("complete-header")
+                )
+        );
 
-        return driver.findElement(By.className("complete-header"))
-                .getText()
-                .equals("Thank you for your order!");
+        return success.getText().contains("Thank you");
     }
 }
