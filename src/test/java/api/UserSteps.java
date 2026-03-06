@@ -19,18 +19,18 @@ public class UserSteps {
         userId = id;
     }
 
-    @When("Send GET request using created user id")
+    @When("Send GET request using saved user id")
     public void get_created_user() {
         response = ApiClient.request()
                 .get("/user/" + createdUserId);
     }
 
     @When("Send POST request to create user")
-    public void send_post_user() {
+    public void create_user() {
 
         Map<String, String> body = new HashMap<>();
-        body.put("firstName", "QA");
-        body.put("lastName", "Automation");
+        body.put("firstName", "Farel");
+        body.put("lastName", "Nouval");
         body.put("email", "qa" + System.currentTimeMillis() + "@mail.com");
 
         response = ApiClient.request()
@@ -40,21 +40,21 @@ public class UserSteps {
         createdUserId = response.jsonPath().getString("id");
     }
 
-    @When("Send PUT request to update user")
-    public void send_put_user() {
+    @When("Send PUT request to update saved user")
+    public void update_user() {
 
         Map<String, String> body = new HashMap<>();
-        body.put("firstName", "Updated");
+        body.put("firstName", "UpdatedName");
 
         response = ApiClient.request()
                 .body(body)
-                .put("/user/" + userId);
+                .put("/user/" + createdUserId);
     }
 
-    @When("Send DELETE request to delete user")
-    public void send_delete_user() {
+    @When("Send DELETE request to delete saved user")
+    public void delete_user() {
         response = ApiClient.request()
-                .delete("/user/" + userId);
+                .delete("/user/" + createdUserId);
     }
 
     @When("Send GET request to get list of tags")
@@ -64,15 +64,19 @@ public class UserSteps {
     }
 
     @Then("Response status code should be {int}")
-    public void validate_status_code(int status) {
-        System.out.println("Response:");
-        response.prettyPrint();
-        Assert.assertEquals(status, response.getStatusCode());
+    public void validate_status(int statusCode) {
+        Assert.assertEquals(statusCode, response.getStatusCode());
     }
 
     @And("Save created user id")
     public void save_user_id() {
         createdUserId = response.jsonPath().getString("id");
+    }
+
+    @When("Send GET request with invalid user id")
+    public void get_invalid_user() {
+        response = ApiClient.request()
+                .get("/user/invalid-id-12345");
     }
 
 

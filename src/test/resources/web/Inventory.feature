@@ -2,10 +2,13 @@
   Feature: Inventory functionality
 
     Background:
-      Given User is logged in successfully
+      Given User is on login page
+      When User enters valid username and password
+      And User clicks login button
+      Then User should be redirected to homepage
 
-    Scenario: Add product to cart
-      When User adds "Sauce Labs Backpack" to cart
+    Scenario: Add backpack to cart
+      When User adds backpack to cart
       Then Cart badge should show 1 item
 
     Scenario: Filter product by price low to high

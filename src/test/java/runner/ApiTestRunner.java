@@ -10,8 +10,9 @@ import io.cucumber.junit.CucumberOptions;
         glue = {"api"},
         plugin = {
                 "pretty",
-                "html:reports/api-cucumber-report.html",
-                "json:reports/api-cucumber-report.json"
+                "html:build/cucumber-reports/api-cucumber-report.html",
+                "json:build/cucumber-reports/api-cucumber-report.json",
+                "io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm"
         },
         tags = "@api"
 )

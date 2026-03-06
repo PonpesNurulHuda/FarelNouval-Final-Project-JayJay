@@ -18,9 +18,10 @@ https://www.saucedemo.com/
 
 ## Test Scenarios WeB UI
 - Login (valid & invalid)
-- Add product to cart
+- Add backpack to cart
 - Filter product (Price & Name)
 - Logout
+- End to end checkout
 
 ## Authentication
 Header required:
@@ -32,6 +33,7 @@ Header required:
 - Update User
 - Delete User
 - Get List of Tags
+- Get user with invalid ID
 
 ## How to Run Web Test / Api Test
 - ./gradlew webTest

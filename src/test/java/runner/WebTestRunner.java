@@ -10,8 +10,9 @@ import io.cucumber.junit.CucumberOptions;
         glue = {"web", "hooks"},
         plugin = {
                 "pretty",
-                "html:reports/web-cucumber-report.html",
-                "json:reports/web-cucumber-report.json"
+                "html:build/cucumber-reports/web-cucumber-report.html",
+                "json:build/cucumber-reports/web-cucumber-report.json",
+                "io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm"
         },
         tags = "@web"
 )

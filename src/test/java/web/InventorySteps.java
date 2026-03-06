@@ -3,20 +3,29 @@ package web;
 import io.cucumber.java.en.*;
 import io.cucumber.messages.types.Product;
 import org.junit.Assert;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import web.InventoryPage;
 import hooks.WebHooks;
 
 import java.util.Collections;
 import java.util.List;
 
-public class InventorySteps {
-    WebDriver driver = WebHooks.driver;
-    InventoryPage inventoryPage = new InventoryPage(driver);
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-    @When("User adds {string} to cart")
-    public void user_adds_product_to_cart(String product) {
-        inventoryPage.addProductToCart(product);
+public class InventorySteps {
+    private WebDriver driver;
+    private InventoryPage inventoryPage;
+
+    public InventorySteps(WebHooks hooks) {
+        this.driver = hooks.getDriver();
+        this.inventoryPage = new InventoryPage(driver);
+    }
+
+    @When("User adds backpack to cart")
+    public void user_adds_backpack_to_cart() {
+        inventoryPage.addBackpackToCart();
     }
 
     @Then("Cart badge should show 1 item")
@@ -52,6 +61,7 @@ public class InventorySteps {
     public void redirected_to_login_page() {
         Assert.assertTrue(inventoryPage.isOnLoginPage());
     }
+
 }
 
 

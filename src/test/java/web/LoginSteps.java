@@ -2,14 +2,26 @@ package web;
 
 import io.cucumber.java.en.*;
 import org.junit.Assert;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import web.LoginPage;
 import hooks.WebHooks;
 
+import java.time.Duration;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 public class LoginSteps {
 
-    WebDriver driver = WebHooks.driver;
-    LoginPage loginPage = new LoginPage(driver);
+    private WebDriver driver;
+    private LoginPage loginPage;
+
+    public LoginSteps(WebHooks hooks) {
+        this.driver = hooks.getDriver();
+        this.loginPage = new LoginPage(driver);
+    }
 
     @Given("User is on login page")
     public void user_is_on_login_page(){
@@ -31,16 +43,30 @@ public class LoginSteps {
     @And("User clicks login button")
     public void user_clicks_login_button() {
         loginPage.clickLogin();
+
+
     }
 
     @Then("User should be redirected to homepage")
     public void user_redirected_homepage() {
-        Assert.assertTrue(loginPage.isOnHomePage());
+
+        new WebDriverWait(driver, Duration.ofSeconds(30))
+                .until(ExpectedConditions.visibilityOfElementLocated(
+                        By.id("inventory_container")
+                ));
+
+        assertTrue(driver.getCurrentUrl().contains("inventory"));
     }
 
     @Then("Error message should be displayed")
     public void error_message_displayed() {
-        Assert.assertTrue(loginPage.isErrorDisplayed());
+
+        new WebDriverWait(driver, Duration.ofSeconds(15))
+                .until(ExpectedConditions.visibilityOfElementLocated(
+                        By.cssSelector("[data-test='error']")
+                ));
+
+        assertTrue(loginPage.isErrorDisplayed());
     }
 
     @Given("User is logged in successfully")
@@ -50,4 +76,6 @@ public class LoginSteps {
         loginPage.inputPassword("secret_sauce");
         loginPage.clickLogin();
     }
+
+
 }

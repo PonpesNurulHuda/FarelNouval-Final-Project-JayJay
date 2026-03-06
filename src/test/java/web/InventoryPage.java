@@ -8,6 +8,8 @@ import java.util.stream.Collectors;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import java.time.Duration;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebElement;
 
 public class InventoryPage {
 
@@ -21,31 +23,35 @@ public class InventoryPage {
     By productNames = By.className("inventory_item_name");
     By menuButton = By.id("react-burger-menu-btn");
     By logoutLink = By.id("logout_sidebar_link");
+    By cartIcon = By.className("shopping_cart_link");
 
     public InventoryPage(WebDriver driver) {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
-    public void addProductToCart(String productName) {
+    public void addBackpackToCart() {
 
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
-
-
+        wait.until(ExpectedConditions.urlContains("inventory.html"));
         wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.className("inventory_list")
+                By.id("inventory_container")
         ));
 
+        wait.until(ExpectedConditions.numberOfElementsToBeMoreThan(
+                By.className("inventory_item"), 5
+        ));
 
-        String formattedName = productName
-                .toLowerCase()
-                .replace(" ", "-");
+        WebElement button = wait.until(
+                ExpectedConditions.elementToBeClickable(
+                        By.id("add-to-cart-sauce-labs-backpack")
+                )
+        );
 
-        String buttonId = "add-to-cart-" + formattedName;
+        button.click();
 
-        By addToCartButton = By.id(buttonId);
-
-        wait.until(ExpectedConditions.elementToBeClickable(addToCartButton)).click();
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.className("shopping_cart_badge")
+        ));
     }
 
     public String getCartBadgeCount() {
@@ -73,19 +79,38 @@ public class InventoryPage {
 
     public void logout() {
 
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebElement menu = wait.until(
+                ExpectedConditions.elementToBeClickable(
+                        By.id("react-burger-menu-btn")
+                )
+        );
+        menu.click();
 
+        WebElement logout = wait.until(
+                ExpectedConditions.elementToBeClickable(
+                        By.id("logout_sidebar_link")
+                )
+        );
+        logout.click();
 
-        wait.until(ExpectedConditions.elementToBeClickable(menuButton)).click();
-
-
-        wait.until(ExpectedConditions.visibilityOfElementLocated(logoutLink));
-
-
-        wait.until(ExpectedConditions.elementToBeClickable(logoutLink)).click();
-    }
+        wait.until(ExpectedConditions.urlContains("saucedemo.com/"));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.id("login-button")
+        ));    }
 
     public boolean isOnLoginPage() {
         return driver.getCurrentUrl().contains("saucedemo.com");
     }
+
+    public void clickCart() {
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+
+        By cartContainer = By.id("shopping_cart_container");
+
+        wait.until(ExpectedConditions.elementToBeClickable(cartContainer)).click();
+
+        wait.until(ExpectedConditions.urlContains("cart.html"));
+    }
+
 }
