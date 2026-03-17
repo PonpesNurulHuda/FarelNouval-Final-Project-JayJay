@@ -8,24 +8,17 @@ on:
       - main
       - develop
 
-# Paksa pakai Node.js 24 (menghilangkan warning deprecated)
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-
 jobs:
-  # ============================================================
-  # Job 1: Web Test
-  # ============================================================
   web-test:
     name: Run Web Test
     runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true  # ✅ Fix Node.js warning
 
     steps:
-      # 1. Ambil kode dari repository
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      # 2. Siapkan Java 17
       - name: Set up Java 17
         uses: actions/setup-java@v4
         with:
@@ -33,22 +26,18 @@ jobs:
           java-version: '17'
           cache: 'gradle'
 
-      # 3. Install Google Chrome
       - name: Install Google Chrome
         run: |
           sudo apt update
           sudo apt install -y google-chrome-stable
 
-      # 4. Beri izin eksekusi pada file gradlew
       - name: Grant Gradle Permission
         run: chmod +x gradlew
 
-      # 5. Jalankan Web Test
       - name: Run Web Test
         run: ./gradlew webTest
         continue-on-error: true
 
-      # 6. Upload laporan hasil test sebagai artifact
       - name: Upload Web Test Reports
         if: always()
         uses: actions/upload-artifact@v4
@@ -58,19 +47,16 @@ jobs:
           retention-days: 30
           if-no-files-found: warn
 
-  # ============================================================
-  # Job 2: API Test
-  # ============================================================
   api-test:
     name: Run API Test
     runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true  # ✅ Fix Node.js warning
 
     steps:
-      # 1. Ambil kode dari repository
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      # 2. Siapkan Java 17
       - name: Set up Java 17
         uses: actions/setup-java@v4
         with:
@@ -78,16 +64,13 @@ jobs:
           java-version: '17'
           cache: 'gradle'
 
-      # 3. Beri izin eksekusi pada file gradlew
       - name: Grant Gradle Permission
         run: chmod +x gradlew
 
-      # 4. Jalankan API Test
       - name: Run API Test
         run: ./gradlew apiTest
         continue-on-error: true
 
-      # 5. Upload laporan hasil test sebagai artifact
       - name: Upload API Test Reports
         if: always()
         uses: actions/upload-artifact@v4
